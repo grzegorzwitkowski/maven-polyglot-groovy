@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+    xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+       http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+
+    <cxf:cxfEndpoint id="userDataEndpoint" address="http://localhost:8080/getUsers" wsdlURL="http://localhost:8080/getUsers?wsdl"
+        serviceClass="test.UsersEndpoint" />
+
+    <cxf:rsServer id="userFullDataServer" address="http://localhost:8082/" serviceClass="test.UserFullDataEndpoint"
+        loggingFeatureEnabled="true">
+        <cxf:providers>
+            <ref bean="jsonProvider" />
+        </cxf:providers>
+    </cxf:rsServer>
+
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+        <route>
+            <from uri="cxfrs:bean:userFullDataServer" />
+            <setHeader headerName="operationName">
+                <constant>getUser</constant>
+            </setHeader>
+            <to ref="userDataEndpoint" />
+        </route>
+    </camelContext>
+
+</beans>
