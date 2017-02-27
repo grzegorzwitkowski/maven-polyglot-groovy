@@ -39,5 +39,13 @@ project {
                 }
             }
         }
+        plugins {
+            plugin(groupId: 'org.apache.maven.plugins', artifactId: 'maven-release-plugin', version: '2.5.3')
+        }
+    }
+
+    scm {
+        url 'https://github.com/grzegorzwitkowski/maven-polyglot-groovy.git'
+        connection 'scm:git:git@github.com:grzegorzwitkowski/maven-polyglot-groovy.git'
     }
 }
