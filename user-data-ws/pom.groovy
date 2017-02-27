@@ -5,6 +5,7 @@ project {
         groupId 'test'
         artifactId 'integration-test'
         version '0.0.1-SNAPSHOT'
+        relativePath '../pom.groovy'
     }
 
     artifactId 'user-data-ws'
